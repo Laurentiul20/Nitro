@@ -1,0 +1,6 @@
+Time log:
+10/02/2022: 8:00pm - 9:00pm Downloading all games and play the simulations
+10/15/2022: 12:40pm - 2:10pm Focusing on Nitrogen game and recording its features and posibilities
+10/16/2022: 6:20pm - 7:33pm Learning more about html5, learning how to use javascript
+10/23/2022: 10:42pm - 11:20pm Remeber how to use Github and its tools, creating repository
+			11:48pm - 12:19am Uploading source code given, game features and timelog

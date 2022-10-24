@@ -1,0 +1,11 @@
+The nitrogen game:
+Under Watershed tab, selection is Whole, Sub Watersheds, and Past Hypoxic Zones
+Under Weather tab, selection is Wet Year, Medium, Dry Year
+Under Crop Price Index, selection is Very Low, Low, Medium, High, Very High
+Under Watershed tab, Whole: 2 sliders controlling Fertilizer Recution(%) and Wetland Restoration(% area)
+Fertilizer Recution reduces hypoxic zone, nitrate entering watershed, and nitrates to gulf in thousand of tones, but increases spendings $ billion(from 0 to 10) , and crop yield reduction (%)
+Wetland Restoration reduces hypoxic zone, nitrates to gulf in thousand of tones, but increases spendings $ billion(from 0 to 10) decintrification, and crop yield reduction (%)
+Weather and crop price just speeds up or slows down the same process.
+Sub Watersheds explore separate regions of Missouri, Upper Missouri, Ohio, Tennessee, Arkansas Red-White, and Lower Mississippi
+Each zone has 2 sliders as in Watershed tab
+Past Hypoxic Zones represents the past years hypoxic zone from 1985 to 2009, you can visually compare them in km2 to the US map
