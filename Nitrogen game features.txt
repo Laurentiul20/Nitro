@@ -8,4 +8,4 @@ Wetland Restoration reduces hypoxic zone, nitrates to gulf in thousand of tones,
 Weather and crop price just speeds up or slows down the same process.
 Sub Watersheds explore separate regions of Missouri, Upper Missouri, Ohio, Tennessee, Arkansas Red-White, and Lower Mississippi
 Each zone has 2 sliders as in Watershed tab
-Past Hypoxic Zones represents the past years hypoxic zone from 1985 to 2009, you can visually compare them in km2 to the US map
+Past Hypoxic Zones represents the past years hypoxic zone from 1985 to 2009, you can visually compare them in km2 to the Mississippi Watershed map
