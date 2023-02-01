@@ -6,3 +6,4 @@ Time Log:
 	    11:48pm - 12:19am Uploading source code given, game features and timelog
 11/27/2022: 3:30pm - 6:20pm Learn react, figure out error when displaying image, learning connection between classes
 01/25/2023: 10:10pm - 1:00am Created frame backgroud, added map, created a draggable element for slider on top of map
+01/31/2023: 8:05pm - 9:18pm Tried to convert react into an html to be able to display it on csu website, did not work
