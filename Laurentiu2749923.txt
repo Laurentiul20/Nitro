@@ -8,3 +8,4 @@ Time Log:
 01/25/2023: 10:10pm - 1:00am Created frame backgroud, added map, created a draggable element for slider on top of map
 01/31/2023: 8:05pm - 9:18pm Tried to convert react into an html to be able to display it on csu website, did not work
 02/03/2023: 7:10pm - 8:00pm Managed to convert and post react app to the CSU website in html format
+02/18/2023: 2:00pm - 5:47pm Created dropdown menus, added styles, hovers, borders.
