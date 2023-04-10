@@ -11,3 +11,4 @@ Time Log:
 02/18/2023: 2:00pm - 5:47pm Created dropdown menus, added styles, hovers, borders.
 02/19/2023: 8:21pm - 11:15pm Created bar chart, sliders, corrected positions of objects.
 03/06/2023: 8:40pm - 11:50pm Worked on binding slider, was not successful.
+04/09/2023: 6.20pm - 9:45pm Changed entire structure of the slider, used a react slider component, added style
