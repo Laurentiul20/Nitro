@@ -14,3 +14,4 @@ Time Log:
 04/09/2023: 6:20pm - 9:45pm Changed entire structure of the slider, used a react slider component, added style
 04/11/2023: 6:00pm - 11:02pm Connected bar chart with slider, created dependency, checked correct values from excel
 04/12/2023: 7:13pm - 12:18am Created formula that uses excel to change values correspondingly. Created fuctional crop price index and used it in total cost when 				     modifying fertilizer reduction slider.
+01/13/2023: 9:07pm - 12:03am Corrected graph bar bug showing many decimals, created function to update cost after seelcting index crop, before was needed to click again 			      on the slider for updated price, corrected representaion of Nitrate to Gulf value, it was dependent on both sliders output at the same time
