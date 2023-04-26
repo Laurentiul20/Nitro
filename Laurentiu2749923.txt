@@ -20,4 +20,5 @@ Time Log:
 04/18/2023: 12:30pm - 2:15pm Created label for hypoxic zone and its size, joined data output with hypoxic zone size, now it scales correctly with sliders, and dropdown selection like weather.
 	    9:31pm - 11:13pm Created a clip that makes overlay work for crop image. Created right scale with formula that scales of the sliders.
 04/20/2023: 10:07am - 11:35 am Created label with percentage for crop image, changed design of select dropdown
-01/20/2023: 8.59pm - 10:57 pm Worked on the final draft on the project with the team
+04/20/2023: 8.59pm - 10:57 pm Worked on the final draft on the project with the team
+04/25/2023: 2.07pm - 11:59 pm Created second map, all 12 sliders, connected them with the 2 graphbars, connected with weather dropdown and crop price index dropdown, created all formulas for nitrates calulations and price for each state. Created new file that keeps constants to use in both maps.
