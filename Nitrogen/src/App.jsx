@@ -1,7 +1,10 @@
 import frame from './images/frame.png';
 import map from './images/map.png';
+import map2 from './images/map2.png';
+import map2transparent from './images/map2transparent.png';
 import hypoxic from './images/hypoxic.png';
 import corn from './images/corn.png';
+import fillcorn from './images/fillcorn.png';
 import './App.css';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
@@ -15,57 +18,45 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import Sub from './Sub.js';
+import Chooser from './mapChooser';
+import {BASE_NITRATES, INTIAL, WEATHER, OPTIONS} from './constants'
+
 function App() {
-  const options = [
+  const mapChoices = [
     {
-      label: "VERY LOW", value: 3
+      label: "WHOLE", value: 0
     },
     {
-      label: "LOW", value: 4
+      label: "SUB WATERSHEDS", value:1
     },
     {
-      label: "MEDIUM", value: 5
-    },
-    {
-      label: "HIGH", value: 6
-    },
-    {
-      label: "VERY HIGH", value: 7
+      label: "PAST HYPOXIC ZONES", value:2
     }
   ];
-  const weather = [
-    {
-      label: "WET YEAR", value: 0
-    },
-    {
-      label: "MEDIUM", value: -500
-    },
-    {
-      label: "DRY YEAR", value: -1000
-    }
-  ];
-  const initial2 =
-  {
-    Fertilizer_Reduction: 0,
-    Wetland_Restoration: 0,
-  }
+  const [mapSelect, setMap] = React.useState(0)
 
-  const BASE_NITRATES = {
-    Nitrates_to_Gulf: 1492.66,
-    Denitrification: 687.34,
-    Nitrates_Entering_Watershed: 2180
+  if(mapSelect == 0) {
+    return <Whole mapChoices={mapChoices} mapSelect={mapSelect} setMap={setMap} />
   }
+  else {
+    return <Sub mapChoices={mapChoices} mapSelect={mapSelect} setMap={setMap} />
+  }
+  
+}
 
-  //const [map, setMap] = React.useState(map1)
+function Whole({mapChoices, setMap, mapSelect}) {
+ 
   const [data, setData] = React.useState(BASE_NITRATES)
-  const [data2, setData2] = React.useState(initial2)
+  const [data2, setData2] = React.useState(INTIAL)
   const [value1, setValue1] = React.useState(0);
   const [value2, setValue2] = React.useState(0);
   const [Indexcrop, setIndexcrop] = React.useState(3);
   const [Weather, setWeather] = React.useState(0);
   const [nitrates, setNitrates] = React.useState(BASE_NITRATES)
-  const [area, setArea] = React.useState(1)
-
+  //const [currentMap, setCurrentMap] = React.useState(map)
+  
+ 
   React.useEffect(() => {
 
     const money = { ...data2 }
@@ -94,11 +85,24 @@ function App() {
 
   const handleChange = (event, newValue) => {
     setValue1(newValue);
-    setArea( (100 - newValue) / 100)
+    
     console.log(newValue)
     updateWaterShed(newValue)
   };
 
+  // function changeMap(e) {
+  //     setMap(e.target.value)
+  //     if(e.target.value == 1) {
+  //       setCurrentMap(map2)
+  //     }
+  //     if(e.target.value == 0) {
+  //       setCurrentMap(map)
+        
+  //     }
+  //     setData(BASE_NITRATES)
+  //     setData2(initial2);
+  //     setNitrates(BASE_NITRATES)
+  // }
   function updateWaterShed(newValue) {
     const item = { ...data }
     const money = { ...data2 }
@@ -107,12 +111,13 @@ function App() {
     if (newValue == 0) { money.Fertilizer_Reduction = 0; }
     // calculates data for Nitrates_Entering_Watershed
 
-    item.Nitrates_Entering_Watershed = nitrates.Nitrates_Entering_Watershed - calcaulateNitrates(newValue);
+    item.Nitrates_Entering_Watershed = (nitrates.Nitrates_Entering_Watershed - calcaulateNitrates(newValue)).toFixed(2);
 
     if (newValue == 0) { item.Nitrates_Entering_Watershed = nitrates.Nitrates_Entering_Watershed; }
 
 
     item.Nitrates_to_Gulf = (item.Nitrates_Entering_Watershed - item.Denitrification).toFixed(2);
+    if (item.Nitrates_to_Gulf<0){item.Nitrates_to_Gulf=0;}
     
     setData(item)
     setData2(money)
@@ -137,6 +142,9 @@ function App() {
   }
   const handleChange2 = (event, newValue) => {
     setValue2(newValue);
+    //setArea( (100 - newValue) / 100)
+    
+    console.log('Nitrates_to_Gulft', data.Nitrates_to_Gulf)
 
     // calculates Wetland Restoration cost
     const item2 = { ...data }
@@ -150,7 +158,10 @@ function App() {
     item2.Denitrification = calcaulateDenitrification(newValue);
     console.log('Denitrification', item2.Denitrification)
     item2.Nitrates_to_Gulf = (item2.Nitrates_Entering_Watershed - item2.Denitrification).toFixed(2);
+    if (item2.Nitrates_to_Gulf<0){item2.Nitrates_to_Gulf=0;}
 
+
+    
     setData(item2)
     setData2(money2)
 
@@ -214,18 +225,57 @@ function App() {
       console.log('END')
       setStart(null)
   }*/
+  const total_area=calculate_area();
+  function calculate_area(){
+    let total_area=(data.Nitrates_to_Gulf-(value2 / 100)*data.Nitrates_to_Gulf)*20-5000
+    if (total_area<0){total_area=0;}
+    return total_area;
+  }
+  
+  const total_percent_reduction=calculate_reduction_crop_yield();
+  function calculate_reduction_crop_yield(){
+    const percent_reduction1= 68.881 * Math.pow((value1 / 100), 2) + (0.8462 * (value1 / 100)) + 0.1958;
+    const percent_reduction2= 18.531 * Math.pow((value2 / 100), 2) + (1.8322 * (value2 / 100)) + 0.007;
+    const total_percent_reduction= 100-((100-percent_reduction1)*(1-percent_reduction2/100));
+    return total_percent_reduction;
+  }
+  console.log('total_percent_reduction', total_percent_reduction)
+  const overlay = { 
+      position: 'absolute',
+      zIndex: 7, left: 20, top: 320,
+      clip : `rect(${361 - (361*total_percent_reduction/100)}px, 320px, 900px, 0px)` 
+  }
 
-  console.log('area', area)
+  // console.log('total_area', total_area)
+
   return (
     <div className="App">
 
       <img src={frame} alt="main frame" height={720} width={950} />
       <img src={map} alt="main map" height={700} width={700} style={{ position: 'absolute', zIndex: 2, left: 0, top: 20 }} />
-      {/* <img src={red} alt="drag element" height={100} width={100} style={{ position: 'absolute', top: top, left: left, zIndex: 3 }}
-                onMouseDown={onDragStart} onMouseMove={onDrag} onMouseUp={onDragEnd}/> */}
-      <img src={hypoxic} alt="hypoxic" height={93 * area} width={300 * area} style={{ position: 'absolute', zIndex: 6, left: 324, top: 574 }} />
-    
+     
+      {/* <img src={map2transparent} alt="map2transparent" height={700} width={700} style={{opacity: 0.2, position: 'absolute', zIndex: 1, left: 0, top: 20 }} /> */}
+      <img src={hypoxic} alt="hypoxic"  width={300 * ((total_area)/24853.2)} style={{ position: 'absolute', zIndex: 6, left: 324, top: 570 }} />
+    <div style={{ position: 'absolute', zIndex: 6, left: 323, top: 644 }}>
+      <h4>
+      |&emsp;&ensp;|&emsp;&ensp;|&emsp;&ensp;|&emsp;&ensp;|&emsp;&ensp;|&emsp;&ensp;|&emsp;&ensp;|&emsp;&ensp;|&emsp;&ensp;|&emsp; &ensp;|
+      </h4>
+      </div>
+      <div style={{ position: 'absolute', zIndex: 6, left: 313, top: 664 }}>
+        <h5>
+      0 km<sup>2</sup>&emsp; 5,000 &emsp; 10,000&emsp; 15,000 &emsp;20,000 &emsp; 25,000
+      </h5>
+      </div>
+      <div className="percentage" style={{ position: 'absolute', zIndex: 8, left: -100, top: 466 }}>
+        <p>|&ensp; &nbsp; |&ensp; &nbsp; |&ensp; &nbsp; |&ensp; &nbsp; |&ensp; &nbsp; |&ensp; &nbsp; |&ensp; &nbsp; |&ensp; &nbsp; |&ensp; &nbsp; |&ensp; &nbsp; |
+        </p>
+      </div>
+      <div className="percentage2" style={{ position: 'absolute', zIndex: 8, left: 40, top: 285 }}>
+        <p>100<br></br>90<br></br>80<br></br>70<br></br>60<br></br>50<br></br>40<br></br>30<br></br>20<br></br>10<br></br>0</p>
+      </div>
+      
       <img src={corn} alt="corn" height={362} width={153} style={{ position: 'absolute', zIndex: 6, left: 20, top: 320 }} />
+      <img src={fillcorn} alt="fillcorn" height={362} width={153} style={overlay} />
       <div className='text-on-image' style={{ zIndex: 4 }}>
         <h1> THE NITROGEN GAME</h1>
       </div>
@@ -236,11 +286,14 @@ function App() {
         <p><b>WATERSHED</b></p>
       </div>
       <div className='dropdown' style={{ zIndex: 10 }}>
-        <select className='dropdown2'>
+        {/* <select className='dropdown2'>
           <option value="WHOLE">WHOLE</option>
           <option value="SUB_WATERSHEDS">SUB WATERSHEDS</option>
           <option value="PAST_HYPOXIC_ZONES">PAST HYPOXIC ZONES</option>
-        </select>
+        </select> */}
+        
+        <Chooser mapChoices={mapChoices} mapSelect={mapSelect} setMap={setMap} />
+        
       </div>
       <div className='weather-text' style={{ zIndex: 10 }}>
         <p><b>WEATHER</b></p>
@@ -251,16 +304,18 @@ function App() {
                 <option value="MEDIUM">MEDIUM</option>
                 <option value="DRY_YEAR">DRY YEAR</option>
             </select> */}
-        <FormControl sx={{ m: 0.5, minWidth: 80 }}>
+        <FormControl sx={{ m: 0.1, minWidth: 80 }}>
           <Select
             labelId="weather"
             id="weather"
             value={Weather}
-            label="Indexcrop"
+            displayEmpty
+            inputProps={{ 'aria-label': 'Without label' }}
+            
 
             onChange={(e) => setWeather(e.target.value)}
           >
-            {weather.map((item) => {
+            {WEATHER.map((item) => {
               return (
                 <MenuItem value={item.value} key={item.value}>
                   {item.label}
@@ -282,16 +337,16 @@ function App() {
                 <option value="HIGH">HIGH</option>
                 <option value="VERY_HIGH">VERY HIGH</option> */}
 
-        <FormControl sx={{ m: 0.5, minWidth: 80 }}>
+        <FormControl sx={{ m: 0.1, minWidth: 80 }}>
           <Select
             labelId="Indexcrop"
             id="Indexcrop"
             value={Indexcrop}
-            label="Indexcrop"
-
+            displayEmpty
+            inputProps={{ 'aria-label': 'Without label' }}
             onChange={(e) => setIndexcrop(e.target.value)}
           >
-            {options.map((item) => {
+            {OPTIONS.map((item) => {
               return (
                 <MenuItem value={item.value} key={item.value}>
                   {item.label}
@@ -314,7 +369,9 @@ function App() {
                 </div> */}
         <div className="filter-range-title2">Wetland Restoration (% area)</div>
       </div>
-
+      <div className='bar-y'style={{ zIndex: 18 }}>
+            <h5>(thousand <br></br> tonnes)</h5>
+        </div>
       <div className='bar'>
         <BarChart style={{ zIndex: 18 }}
           width={200}
@@ -327,7 +384,6 @@ function App() {
             bottom: 5
           }}
         >
-
           <XAxis dataKey="nitratebar" />
           <YAxis type="number" domain={[0, 5000]} />
           <Tooltip />
@@ -337,6 +393,9 @@ function App() {
           <Bar dataKey="Nitrates_to_Gulf" stackId="a" name="Nitrates to Gulf" fill="purple" />
         </BarChart>
       </div>
+      <div className='bar-x'style={{ zIndex: 18 }}>
+            <h5>($ billion)</h5>
+        </div>
       <div className='bar2'>
         <BarChart style={{ zIndex: 17 }}
           width={150}
@@ -363,58 +422,71 @@ function App() {
           
         </BarChart>
       </div>
-
-      <div className='slider1'>
-        <Box sx={{ width: 300 }} >
-          <Slider style={{ zIndex: 21 }} sx={{
-            color: '#000',
-            '& .MuiSlider-thumb': {
-              backgroundColor: "secondary.light",
-              marginTop: "-13px",
-            },
-            "& .MuiSlider-track": {
-              height: 0
-            },
-          }}
-            aria-label="Always visible"
-            defaultValue={0}
-            onChange={handleChange}
-            min={0}
-            max={100}
-            marks
-            step={1}
-            valueLabelDisplay="auto" />
-        </Box>
-      </div>
-
-      <div className='slider2'>
-        <Box sx={{ width: 300 }} >
-          <Slider style={{ zIndex: 21 }} sx={{
-            color: '#000',
-            '& .MuiSlider-thumb': {
-              backgroundColor: "primary.light",
-              marginTop: "13px",
-
-            },
-            "& .MuiSlider-track": {
-              height: 0
-
-            },
-          }}
-            aria-label="Always visible"
-            defaultValue={0}
-            onChange={handleChange2}
-            min={0}
-            max={100}
-            marks
-            step={1}
-            valueLabelDisplay="auto" />
-        </Box>
+      {<>
+            <Slider1 handleChange={handleChange} />
+            <Slider2 handleChange={handleChange2} />  
+          </>
+      }
+      
+      
+      <div className='corntext' style={{ zIndex: 21 }}>
+        <h3>Crop Yield Reduction(%)</h3>
       </div>
     </div>
   );
 }
 
-console.log('version 2')
+function Slider2({handleChange}) {
+  return(<div className='slider2'>
+          <Box sx={{ width: 300 }} >
+            <Slider style={{ zIndex: 21 }} sx={{
+              color: '#000',
+              '& .MuiSlider-thumb': {
+                backgroundColor: "primary.light",
+                marginTop: "13px",
+
+              },
+              "& .MuiSlider-track": {
+                height: 0
+
+              },
+            }}
+              aria-label="Always visible"
+              defaultValue={0}
+              onChange={handleChange}
+              min={0}
+              max={100}
+              marks
+              step={1}
+              valueLabelDisplay="auto" />
+          </Box>
+        </div>)
+}
+
+function Slider1({handleChange}) {
+  return (<div className='slider1'>
+              <Box sx={{ width: 300 }} >
+                <Slider style={{ zIndex: 21 }} sx={{
+                  color: '#000',
+                  '& .MuiSlider-thumb': {
+                    backgroundColor: "secondary.light",
+                    marginTop: "-13px",
+                  },
+                  "& .MuiSlider-track": {
+                    height: 0
+                  },
+                }}
+                  aria-label="Always visible"
+                  defaultValue={0}
+                  onChange={handleChange}
+                  min={0}
+                  max={100}
+                  marks
+                  step={1}
+                  valueLabelDisplay="auto" />
+              </Box>
+        </div>
+  )
+} 
 
 export default App;
