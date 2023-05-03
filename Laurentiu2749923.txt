@@ -24,4 +24,5 @@ Time Log:
 04/25/2023: 2:07pm - 11:59 pm Created second map, all 12 sliders, connected them with the 2 graphbars, connected with weather dropdown and crop price index dropdown, created all formulas for nitrates calulations and price for each state. Created new file that keeps constants to use in both maps.
 04/27/2023: 9:00am - 10:10 am Connected hypoxic zone area to the sliders, now it shrinks as it should
 04/29/2023: 11:56am - 2:20 pm Bound right formula with corn image to display right shading, created 3-rd map in selection dropdown with all years and right size for hypoxic zone.
-	    10:17pm - 1:32 am Corrected right changes for weather dropdown, now all states changes accordingly to formula
+	    10:17pm - 1:32am Corrected right changes for weather dropdown, now all states changes accordingly to formula
+05/01/2023: 8:45pm - 11:20pm Corrected money and index crop dropdown displaying right formula. Wrapping up the project.
